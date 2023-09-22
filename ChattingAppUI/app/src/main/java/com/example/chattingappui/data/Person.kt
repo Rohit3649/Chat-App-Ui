@@ -13,11 +13,11 @@ data class Person(
     @DrawableRes val icon: Int = R.drawable.person_1
 ) : Parcelable
 
-val soloPerson = Person(
+/*val soloPerson = Person(
     1,
     "Pranav",
     R.drawable.person_1
-)
+)*/
 
 val personList = listOf(
     Person(

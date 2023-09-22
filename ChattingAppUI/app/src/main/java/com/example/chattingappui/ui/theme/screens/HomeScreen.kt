@@ -13,16 +13,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
@@ -40,11 +41,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.chattingappui.data.Person
 import com.example.chattingappui.data.personList
-import com.example.chattingappui.data.soloPerson
+import com.example.chattingappui.ui.theme.Gray
+import com.example.chattingappui.ui.theme.Gray400
+import com.example.chattingappui.ui.theme.Line
 import com.example.chattingappui.ui.theme.component.IconComponentDrawable
 import com.example.chattingappui.ui.theme.component.IconComponentImageVector
 import com.example.chattingappui.ui.theme.component.SpacerHeight
 import com.example.chattingappui.ui.theme.component.SpacerWidth
+import com.example.chattingappui.ui.theme.navigation.Chat
 
 
 @Composable
@@ -57,26 +61,100 @@ fun HomeScreen(navHostController: NavHostController) {
     ) {
         Column() {
             HeaderAndStory()
-            CreateChatWindow()
+            Box(
+                modifier = Modifier
+                    .padding(top = 20.dp)
+                    .fillMaxSize()
+                    .background(
+                        Color.White, RoundedCornerShape(
+                            topStart = 30.dp, topEnd = 30.dp
+                        )
+                    )
+            ) {
+                BottomSheetSwipeUp(
+                    modifier = Modifier
+                        .align(TopCenter)
+                        .padding(top = 15.dp)
+                )
+                LazyColumn(
+                    modifier = Modifier.padding(bottom = 20.dp, top = 20.dp)
+                ) {
+                    items(personList, key = { it.id }) {
+                        UserChatEachRow(person = it) {
+                            navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                                "data",
+                                it
+                            )
+                            navHostController.navigate(Chat)
+                        }
+                    }
+                }
+            }
         }
     }
+}
+
+@Composable
+fun BottomSheetSwipeUp(
+    modifier: Modifier
+) {
+    Box(
+        modifier = modifier
+            .background(
+                Gray400,
+                RoundedCornerShape(90.dp)
+            )
+            .width(90.dp)
+            .height(5.dp)
+    )
 }
 
 @Composable
 fun UserChatEachRow(
     modifier: Modifier = Modifier,
     person: Person,
-    onClick:() -> Unit = {}
+    onClick: () -> Unit = {}
 ) {
     Box(modifier = modifier
         .fillMaxWidth()
         .background(Color.White)
         .clickable { onClick() }
-        .padding(horizontal = 20.dp, vertical = 5.dp)) {
+        .padding(horizontal = 20.dp, vertical = 7.dp)) {
         Column {
-            Row {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row {
+                    IconComponentDrawable(icon = person.icon, size = 60.dp)
+                    SpacerWidth()
+                    Column {
+                        Text(
+                            text = person.name, style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black
+                            )
+                        )
+                        SpacerHeight()
+                        Text(
+                            text = "Okay", style = TextStyle(
+                                fontSize = 14.sp,
+                                color = Gray
+                            )
+                        )
+                    }
 
+                }
+                Text(
+                    text = "12:23 PM", style = TextStyle(
+                        fontSize = 12.sp,
+                        color = Gray
+                    )
+                )
             }
+            SpacerHeight(15.dp)
+            Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp, color = Line)
         }
     }
 }
@@ -109,11 +187,10 @@ fun BottomSheetSwipe(
 ) {
     Box(
         modifier = modifier
-            .fillMaxWidth()
             .clip(RoundedCornerShape(90.dp))
             .width(90.dp)
             .height(5.dp)
-            .background(Color.Green)
+            .background(Gray400)
     ) {
 
     }

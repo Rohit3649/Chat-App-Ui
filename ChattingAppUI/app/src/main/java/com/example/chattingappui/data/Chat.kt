@@ -9,6 +9,13 @@ data class Chat(
     val direction:Boolean //true - chat @left side, false - right side
 )
 
+/*val soloChat = Chat(
+    1,
+    "Hey! How have you been?",
+    "12:15 PM",
+    true
+)*/
+
 val chatList = listOf(
     Chat(
         1,
@@ -30,7 +37,7 @@ val chatList = listOf(
     ),
     Chat(
         4,
-        "Can I also get my cousin along? Will that be okay?",
+        "Can I also get my cousin along with me? Will that be okay?",
         "12:20 PM",
         false
     ),
