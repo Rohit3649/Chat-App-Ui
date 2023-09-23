@@ -10,7 +10,7 @@ import kotlinx.parcelize.Parcelize
 data class Person(
     val id: Int = 0,
     val name: String = "",
-    @DrawableRes val icon: Int = R.drawable.person_1
+    @DrawableRes val icon: Int = R.drawable.rohit1_circle
 ) : Parcelable
 
 /*val soloPerson = Person(
@@ -20,61 +20,61 @@ data class Person(
 )*/
 
 val imageList = listOf(
-    R.drawable.person_1,
-    R.drawable.person_2,
-    R.drawable.person_3,
-    R.drawable.person_4
+    R.drawable.gaj1_circle,
+    R.drawable.saman1_circle,
+    R.drawable.doc1_circle,
+    R.drawable.baba1_circle
 )
 
 val personList = listOf(
     Person(
         1,
-        "Pranav",
-        R.drawable.person_1
+        "Neeraj",
+        R.drawable.neeraj1_circle
     ),
     Person(
         2,
-        "Ayesha",
-        R.drawable.person_2
+        "Ranjeet",
+        R.drawable.saman1_circle
     ),
     Person(
         3,
-        "Roshini",
-        R.drawable.person_3
+        "Abhishek",
+        R.drawable.gaj1_circle
     ),
     Person(
         4,
-        "Kaushik",
-        R.drawable.person_4
+        "Vipul",
+        R.drawable.doc1_circle
     ),
     Person(
         5,
-        "Dad",
-        R.drawable.img
+        "Vijay",
+        R.drawable.baba1_circle
     ),
     Person(
         6,
-        "Pranav",
-        R.drawable.person_1
+        "Abhishek",
+        R.drawable.gaj1_circle
     ),
     Person(
         7,
-        "Ayesha",
-        R.drawable.person_2
+        "Ranjeet",
+        R.drawable.saman1_circle
     ),
     Person(
         8,
-        "Roshini",
-        R.drawable.person_3
+        "Vijay",
+        R.drawable.baba1_circle
     ),
     Person(
         9,
-        "Kaushik",
-        R.drawable.person_4
+        "Vipul",
+        R.drawable.doc1_circle
     ),
     Person(
         10,
-        "Dad",
-        R.drawable.img
+        "Neeraj",
+        R.drawable.neeraj1_circle
     ),
 )

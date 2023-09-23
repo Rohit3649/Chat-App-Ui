@@ -51,7 +51,6 @@ import com.example.chattingappui.ui.theme.component.SpacerWidth
 import com.example.chattingappui.ui.theme.navigation.Chat
 import com.example.chattingappui.ui.theme.navigation.Status
 
-
 @Composable
 fun HomeScreen(navHostController: NavHostController) {
 
@@ -151,7 +150,7 @@ fun UserChatEachRow(
 
                 }
                 Text(
-                    text = "12:23 PM", style = TextStyle(
+                    text = "10:30 PM", style = TextStyle(
                         fontSize = 12.sp,
                         color = Gray
                     )
@@ -210,9 +209,9 @@ fun WelcomeHeader() {
                 color = Color.White
             )
         ) {
-            append("Welcome Back")
+            append("Hello \uD83D\uDC4B")
         }
-        SpacerWidth()
+        append("   ")
         withStyle(
             style = SpanStyle(
                 fontSize = 20.sp,
@@ -238,7 +237,7 @@ fun AddStoryHeader() {
             modifier = Modifier
                 .size(70.dp)
                 .clip(CircleShape)
-                .background(Color.Yellow)
+                .background(Color.White)
                 .border(2.dp, Color.Red, CircleShape),
             contentAlignment = Alignment.Center
         ) {
@@ -252,7 +251,7 @@ fun AddStoryHeader() {
                 IconComponentImageVector(
                     icon = Icons.Default.Add,
                     size = 15.dp,
-                    tint = Color.Yellow
+                    tint = Color.White
                 )
             }
         }
@@ -260,7 +259,7 @@ fun AddStoryHeader() {
         Text(
             text = "Add Story",
             style = TextStyle(
-                fontSize = 20.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.W300,
                 color = Color.White
             )
@@ -273,10 +272,10 @@ fun HeaderAndStory(
     onStoryClick: (Person) -> Unit = {}
 ) {
     Column(
-        modifier = Modifier.padding(start = 20.dp, top = 20.dp)
+        modifier = Modifier.padding(start = 20.dp, top = 30.dp)
     ) {
         WelcomeHeader()
-        SpacerHeight()
+        SpacerHeight(20.dp)
         ViewUserStoryLayout() {
             onStoryClick(it)
         }
@@ -313,7 +312,7 @@ fun UserStoryLayout(
             modifier = Modifier
                 .size(70.dp)
                 .clip(CircleShape)
-                .background(Color.Yellow),
+                .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
             IconComponentDrawable(icon = person.icon, size = 65.dp) {
@@ -324,7 +323,7 @@ fun UserStoryLayout(
         Text(
             text = person.name,
             style = TextStyle(
-                fontSize = 20.sp,
+                fontSize = 15.sp,
                 fontWeight = FontWeight.W300,
                 color = Color.White
             ),

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,6 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -39,22 +42,29 @@ import com.example.chattingappui.ui.theme.navigation.Home
 @Composable
 fun StartScreen(navHostController: NavHostController) {
 
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp.dp
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.Black)
     )
     {
-        Image(
-            painter = painterResource(id = R.drawable.background),
-            contentDescription = "",
-            contentScale = ContentScale.FillWidth
-        )
+        Box (
+            modifier = Modifier.height(screenHeight / 2)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.chat_main),
+                contentDescription = "",
+                contentScale = ContentScale.FillHeight
+            )
+        }
 
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 220.dp)
+                .padding(top = 300.dp)
                 .align(Alignment.Center)
         ) {
             Column(
@@ -68,9 +78,8 @@ fun StartScreen(navHostController: NavHostController) {
                         color = Color.White
                     )
                 )
-                SpacerHeight(15.dp)
+                SpacerHeight(20.dp)
                 CustomCheckBox()
-
             }
         }
 

@@ -70,4 +70,5 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:2.7.2")
     implementation("com.google.accompanist:accompanist-pager:0.20.2")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.33.1-alpha")
 }

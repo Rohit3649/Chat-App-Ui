@@ -16,6 +16,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -27,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -106,7 +109,7 @@ fun ChatScreen(navHostController: NavHostController) {
                     items(chatList, key = {
                         it.id
                     }) {
-                        ChatRow(chat = it)
+                        ChatRow(chat = it, person = person)
                     }
                 }
 
@@ -125,33 +128,45 @@ fun ChatScreen(navHostController: NavHostController) {
 
 @Composable
 fun ChatRow(
-    chat: Chat
+    chat: Chat,
+    person: Person
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = if (chat.direction) Alignment.Start else Alignment.End
     ) {
-        Box(
-            modifier = Modifier
-                .background(
-                    color = if (chat.direction) LightRed else LightYellow,
-                    shape = RoundedCornerShape(100.dp)
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = chat.message,
-                style = TextStyle(
-                    fontSize = 15.sp,
-                    color = Color.Black
-                ),
-                textAlign = TextAlign.End,
-                modifier = Modifier.padding(
-                    horizontal = 15.dp,
-                    vertical = 8.dp
+        Row {
+            if (chat.direction) {
+                IconComponentDrawable(icon = R.drawable.rohit1_circle, size = 33.dp)
+                SpacerWidth(3.dp)
+            }
+            Box(
+                modifier = Modifier
+                    .background(
+                        color = if (chat.direction) LightRed else LightYellow,
+                        shape = RoundedCornerShape(100.dp)
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = chat.message,
+                    style = TextStyle(
+                        fontSize = 15.sp,
+                        color = Color.Black
+                    ),
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.padding(
+                        horizontal = 15.dp,
+                        vertical = 8.dp
+                    )
                 )
-            )
+            }
+            if (!chat.direction) {
+                SpacerWidth(3.dp)
+                IconComponentDrawable(icon = person.icon, size = 33.dp)
+            }
         }
+
         Text(
             text = chat.time,
             style = TextStyle(
@@ -240,6 +255,16 @@ fun UserEachRow(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row {
+            Box(modifier = Modifier
+                .align(CenterVertically)
+                .padding(end = 5.dp)) {
+                IconComponentImageVector(
+                    icon = Icons.Default.ArrowBack,
+                    size = 24.dp,
+                    tint = Color.White,
+                )
+            }
+
             IconComponentDrawable(icon = person.icon, size = 50.dp)
             SpacerWidth(8.dp)
             Column {

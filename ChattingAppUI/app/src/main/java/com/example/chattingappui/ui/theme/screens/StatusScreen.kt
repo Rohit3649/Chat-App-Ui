@@ -10,29 +10,26 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
@@ -46,8 +43,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.chattingappui.data.Person
+import com.example.chattingappui.data.Status
 import com.example.chattingappui.data.imageList
-import kotlinx.coroutines.Job
+import com.example.chattingappui.data.statusList
+import com.example.chattingappui.ui.theme.Gray
+import com.google.accompanist.systemuicontroller.SystemUiController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -56,16 +57,28 @@ fun StatusScreen(navHostController: NavHostController) {
     val person =
         navHostController.previousBackStackEntry?.savedStateHandle?.get<Person>("data") ?: Person()
 
-/*    StoriesComponent(imageList) {
-        navHostController.popBackStack()
+/*    val systemUiController: SystemUiController = rememberSystemUiController()
+    DisposableEffect(key1 = true) {
+        systemUiController.isStatusBarVisible = false // Status bar
+        onDispose {
+            systemUiController.isStatusBarVisible = true // Status bar
+        }
     }*/
-    MyNewStoryComponent(imageList)
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.Black),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        MyNewStoryComponent(statusList)
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MyNewStoryComponent(
-    listOfImages: List<Int>,
+    listOfImages: List<Status>,
     onLastImage: () -> Unit = {},
 ) {
     val pagerState = rememberPagerState {
@@ -86,45 +99,47 @@ fun MyNewStoryComponent(
     HorizontalPager(
         state = pagerState,
         key = {
-            listOfImages[it]
+            listOfImages[it].id
         }
     ) {
-        ImageTouchChecker(
-            image = listOfImages[it],
-            modifier = Modifier.fillMaxSize(),
-            onLeftSideTouched = {
-                Log.i("VIJAY", "onLeftSideTouched")
-                coroutineScope.launch {
-                    pagerState.scrollToPage(pagerState.currentPage - 1)
+
+        Box(
+            modifier = Modifier
+                .padding(top = 50.dp)
+                .background(color = Color.White)
+        ) {
+            ImageTouchChecker(
+                image = listOfImages[it].icon,
+                modifier = Modifier.fillMaxSize(),
+                onLeftSideTouched = {
+                    Log.i("VIJAY", "onLeftSideTouched")
+                    coroutineScope.launch {
+                        pagerState.scrollToPage(pagerState.currentPage - 1)
+                    }
+                },
+                onRightSideTouched = {
+                    Log.i("VIJAY", "onRightSideTouched")
+                    coroutineScope.launch {
+                        pagerState.scrollToPage(pagerState.currentPage + 1)
+                    }
                 }
-            },
-            onRightSideTouched = {
-                Log.i("VIJAY", "onRightSideTouched")
-                coroutineScope.launch {
-                    pagerState.scrollToPage(pagerState.currentPage + 1)
-                }
-            }
-        )
+            )
+        }
     }
 
     Row(
         Modifier
             .height(50.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(top = 14.dp, start = 10.dp, end = 5.dp),
         horizontalArrangement = Arrangement.Center
     ) {
         repeat(listOfImages.size) { iteration ->
-/*            val color = if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
-            Box(
-                modifier = Modifier
-                    .padding(2.dp)
-                    .clip(CircleShape)
-                    .background(color)
-                    .size(20.dp)
-            )*/
             Log.i("VJAY", "LinearIndicator called")
             LinearIndicator(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 10.dp),
                 startProgress = pagerState.currentPage == iteration,
             ) {
                 coroutineScope.launch {
@@ -135,43 +150,6 @@ fun MyNewStoryComponent(
         }
     }
 }
-
-@Composable
-fun LinearIndicatorNew(
-    modifier: Modifier = Modifier,
-    startProgress: Boolean = false,
-    onAnimationEnd: () -> Unit = {}
-) {
-    var progress by remember {
-        mutableFloatStateOf(0.00f)
-    }
-
-    val animatedProgress by animateFloatAsState(
-        targetValue = progress,
-        animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
-        label = ""
-    )
-
-    if (startProgress) {
-        LaunchedEffect(key1 = Unit) {
-            while (progress < 1f) {
-                progress += 0.01f
-                delay(50)  //=> 5sec - 5000/100
-            }
-            onAnimationEnd()
-        }
-    }
-
-    LinearProgressIndicator(
-        progress = progress,
-        modifier = modifier
-            .padding(top = 12.dp, bottom = 12.dp)
-            .clip(RoundedCornerShape(12.dp)),
-        color = Color.Red,
-        trackColor = Color.Green
-    )
-}
-
 
 @Composable
 fun ImageTouchChecker(
@@ -188,7 +166,7 @@ fun ImageTouchChecker(
 
     Image(
         painter = painterResource(id = image),
-        contentScale = ContentScale.Crop,
+        contentScale = ContentScale.Fit,
         contentDescription = null,
         modifier = modifier
             .onSizeChanged { imageWidth = it.width }
@@ -208,102 +186,6 @@ fun ImageTouchChecker(
                 }
             }
     )
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun StoriesComponent(
-    listOfImages: List<Int>,
-    onLastImage: () -> Unit,
-) {
-    val pagerState = rememberPagerState {
-        listOfImages.size
-    }
-
-    var job: Job? by remember {
-        mutableStateOf(null)
-    }
-
-    //pagerState had to be called from suspend function or coroutine builder
-    val coroutineScope = rememberCoroutineScope()
-
-    var currentPage by remember {
-        mutableIntStateOf(pagerState.currentPage)
-    }
-
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        StoryImage_2(pagerState = pagerState, listOfImages = listOfImages)
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Spacer(modifier = Modifier.padding(4.dp))
-
-            listOfImages.forEachIndexed { index, i ->
-                LinearIndicator(
-                    modifier = Modifier.weight(1f),
-                    startProgress = index == currentPage,
-                ) {
-                    Log.i("VIJAY", "index $index")
-                    job = coroutineScope.launch {
-
-                        currentPage = pagerState.currentPage
-
-                        if (currentPage < listOfImages.size - 1) {
-                            currentPage++
-                        } else if (currentPage == listOfImages.size - 1) {
-                            onLastImage()
-                        }
-                        pagerState.animateScrollToPage(currentPage)
-                    }
-                }
-                Spacer(modifier = Modifier.padding(4.dp))
-            }
-        }
-    }
-
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun StoryImage(
-    pagerState: PagerState,
-    listOfImages: List<Int>
-) {
-    HorizontalPager(
-        state = pagerState,
-        userScrollEnabled = false
-    ) {
-        Image(
-            painter = painterResource(id = listOfImages[it]),
-            contentDescription = "",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-        )
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun StoryImage_2(
-    pagerState: PagerState,
-    listOfImages: List<Int>
-) {
-    HorizontalPager(
-        state = pagerState,
-        key = {
-            listOfImages[it]
-        }
-    ) {
-        Image(
-            painter = painterResource(id = listOfImages[it]),
-            contentDescription = "",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-        )
-    }
 }
 
 @Composable
@@ -340,8 +222,8 @@ fun LinearIndicator(
         modifier = modifier
             .padding(top = 12.dp, bottom = 12.dp)
             .clip(RoundedCornerShape(12.dp)),
-        color = Color.Red,
-        trackColor = Color.Green
+        color = Color.White,
+        trackColor = Gray
     )
 }
 
