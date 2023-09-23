@@ -1,6 +1,7 @@
 package com.example.chattingappui.ui.theme.component
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -16,12 +17,15 @@ fun IconComponentDrawable(
     @DrawableRes icon: Int,
     modifier: Modifier = Modifier,
     size: Dp,
-    tint: Color = Color.Unspecified
+    tint: Color = Color.Unspecified,
+    onClick: () -> Unit = {}
 ) {
     Icon(
         painter = painterResource(id = icon),
         contentDescription = "",
-        modifier = modifier.size(size),
+        modifier = modifier
+            .size(size)
+            .clickable { onClick() },
         tint = tint
     )
 }

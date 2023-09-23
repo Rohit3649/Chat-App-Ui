@@ -19,6 +19,13 @@ data class Person(
     R.drawable.person_1
 )*/
 
+val imageList = listOf(
+    R.drawable.person_1,
+    R.drawable.person_2,
+    R.drawable.person_3,
+    R.drawable.person_4
+)
+
 val personList = listOf(
     Person(
         1,

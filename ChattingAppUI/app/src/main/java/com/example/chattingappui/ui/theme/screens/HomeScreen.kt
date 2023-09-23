@@ -49,6 +49,7 @@ import com.example.chattingappui.ui.theme.component.IconComponentImageVector
 import com.example.chattingappui.ui.theme.component.SpacerHeight
 import com.example.chattingappui.ui.theme.component.SpacerWidth
 import com.example.chattingappui.ui.theme.navigation.Chat
+import com.example.chattingappui.ui.theme.navigation.Status
 
 
 @Composable
@@ -60,7 +61,10 @@ fun HomeScreen(navHostController: NavHostController) {
             .background(Color.Black)
     ) {
         Column() {
-            HeaderAndStory()
+            HeaderAndStory() {
+                navHostController.currentBackStackEntry?.savedStateHandle?.set("data", it)
+                navHostController.navigate(Status)
+            }
             Box(
                 modifier = Modifier
                     .padding(top = 20.dp)
@@ -113,12 +117,12 @@ fun BottomSheetSwipeUp(
 fun UserChatEachRow(
     modifier: Modifier = Modifier,
     person: Person,
-    onClick: () -> Unit = {}
+    onChatClick: () -> Unit = {}
 ) {
     Box(modifier = modifier
         .fillMaxWidth()
         .background(Color.White)
-        .clickable { onClick() }
+        .clickable { onChatClick() }
         .padding(horizontal = 20.dp, vertical = 7.dp)) {
         Column {
             Row(
@@ -228,7 +232,7 @@ fun AddStoryHeader() {
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = CenterHorizontally
     ) {
         Box(
             modifier = Modifier
@@ -265,25 +269,35 @@ fun AddStoryHeader() {
 }
 
 @Composable
-fun HeaderAndStory() {
+fun HeaderAndStory(
+    onStoryClick: (Person) -> Unit = {}
+) {
     Column(
         modifier = Modifier.padding(start = 20.dp, top = 20.dp)
     ) {
         WelcomeHeader()
         SpacerHeight()
-        ViewUserStoryLayout()
+        ViewUserStoryLayout() {
+            onStoryClick(it)
+        }
     }
 }
 
 @Composable
-fun ViewUserStoryLayout() {
+fun ViewUserStoryLayout(
+    onStoryClick: (Person) -> Unit = {}
+) {
     LazyRow() {
         item {
             AddStoryHeader()
             SpacerWidth()
         }
-        items(personList, key = { it.id }) {
-            UserStoryLayout(person = it)
+        items(personList, key = {
+            it.id
+        }) {
+            UserStoryLayout(person = it) {
+                onStoryClick(it)
+            }
         }
     }
 }
@@ -291,9 +305,10 @@ fun ViewUserStoryLayout() {
 @Composable
 fun UserStoryLayout(
     modifier: Modifier = Modifier,
-    person: Person
+    person: Person,
+    onStoryClick: () -> Unit = {}
 ) {
-    Column(modifier = Modifier.padding(end = 10.dp)) {
+    Column(modifier = modifier.padding(end = 10.dp)) {
         Box(
             modifier = Modifier
                 .size(70.dp)
@@ -301,7 +316,9 @@ fun UserStoryLayout(
                 .background(Color.Yellow),
             contentAlignment = Alignment.Center
         ) {
-            IconComponentDrawable(icon = person.icon, size = 65.dp)
+            IconComponentDrawable(icon = person.icon, size = 65.dp) {
+                onStoryClick()
+            }
         }
         SpacerHeight()
         Text(
