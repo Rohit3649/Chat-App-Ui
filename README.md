@@ -2,7 +2,11 @@
 Design different Screens for chat App
 
 Output -
-![Start_screen](https://github.com/Rohit3649/Chat-App-Ui/assets/34687699/56f01622-1d09-4510-ade4-d9219888c259)
-![Home_screen](https://github.com/Rohit3649/Chat-App-Ui/assets/34687699/6679b8ac-a607-4648-bf1b-5d7b36125b3c)
-![Chat_screen](https://github.com/Rohit3649/Chat-App-Ui/assets/34687699/d40bbb74-6b99-4197-8dda-96b5f8cdb970)
-![Status_screen](https://github.com/Rohit3649/Chat-App-Ui/assets/34687699/09b0f33a-8014-4fd0-89d1-83a3911587d3)
+
+<img src="https://github.com/Rohit3649/Chat-App-Ui/assets/34687699/56f01622-1d09-4510-ade4-d9219888c259" width="250" height="500">
+
+<img src="https://github.com/Rohit3649/Chat-App-Ui/assets/34687699/e1af6d40-9d83-48af-960a-836f7600e620" width="250" height="500">
+
+<img src="https://github.com/Rohit3649/Chat-App-Ui/assets/34687699/6a66ef57-d66f-4e5c-8347-7a888524ade1" width="250" height="500">
+
+<img src="https://github.com/Rohit3649/Chat-App-Ui/assets/34687699/3eceb6bf-3380-42f6-8169-83984b9e3c9f" width="250" height="500">
