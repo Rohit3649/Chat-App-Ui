@@ -1,2 +1,2 @@
-# ChatUi
-Design different Screen for chat App
+# Chat App Ui
+Design different Screens for chat App
